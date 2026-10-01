@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b1220">
+  <title>XAUUSD Pro V3.2</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div>
+    <div class="brand">XAUUSD <span>PRO</span></div>
+    <div class="version">V3.2 • Gold Trading Analysis</div>
+  </div>
+  <div class="status"><i id="statusDot"></i><span id="statusText">OFFLINE</span></div>
+</header>
+
+<main class="container">
+  <section class="hero card">
+    <div>
+      <div class="muted">XAU/USD</div>
+      <div id="price" class="price">—</div>
+      <div id="change" class="change">—</div>
+    </div>
+    <div class="quote-grid">
+      <div><span>Bid</span><b id="bid">—</b></div>
+      <div><span>Ask</span><b id="ask">—</b></div>
+      <div><span>Spread</span><b id="spread">—</b></div>
+      <div><span>Updated</span><b id="updated">—</b></div>
+    </div>
+  </section>
+
+  <section class="toolbar card">
+    <div class="row wrap">
+      <label>Timeframe
+        <select id="interval">
+          <option value="1min">1m</option><option value="5min" selected>5m</option>
+          <option value="15min">15m</option><option value="30min">30m</option>
+          <option value="1h">1H</option><option value="4h">4H</option><option value="1day">1D</option>
+        </select>
+      </label>
+      <label>Refresh
+        <select id="refresh">
+          <option value="15000">15s</option><option value="30000" selected>30s</option>
+          <option value="60000">60s</option><option value="0">Manual</option>
+        </select>
+      </label>
+      <button id="refreshBtn" class="primary">↻ Refresh</button>
+      <button id="soundBtn">🔔 Sound: OFF</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-head"><h2>Market Chart</h2><span id="trendBadge" class="badge neutral">WAITING</span></div>
+    <div id="chart" class="chart"></div>
+    <div class="legend">
+      <span><b>EMA20</b> <i id="ema20v">—</i></span>
+      <span><b>EMA50</b> <i id="ema50v">—</i></span>
+      <span><b>EMA200</b> <i id="ema200v">—</i></span>
+    </div>
+  </section>
+
+  <section class="grid-2">
+    <div class="card">
+      <div class="section-head"><h2>Signal Engine</h2><span id="signalBadge" class="badge neutral">NO SIGNAL</span></div>
+      <div class="signal-main">
+        <div id="signalText" class="signal-text">WAITING FOR MARKET DATA</div>
+        <div class="strength"><div><span>Signal Strength</span><b id="strength">0%</b></div><div class="progress"><i id="strengthBar"></i></div></div>
+      </div>
+      <div class="levels">
+        <div><span>Entry</span><b id="entry">—</b></div>
+        <div><span>Stop Loss</span><b id="sl">—</b></div>
+        <div><span>TP1</span><b id="tp1">—</b></div>
+        <div><span>TP2</span><b id="tp2">—</b></div>
+      </div>
+      <p class="small">Signal is algorithmic analysis, not a guarantee of profit. Confirm market conditions and manage risk before trading.</p>
+    </div>
+
+    <div class="card">
+      <div class="section-head"><h2>Technical Analysis</h2></div>
+      <div class="metrics">
+        <div><span>Trend</span><b id="trend">—</b></div>
+        <div><span>RSI (14)</span><b id="rsi">—</b></div>
+        <div><span>MACD</span><b id="macd">—</b></div>
+        <div><span>ATR (14)</span><b id="atr">—</b></div>
+        <div><span>Support</span><b id="support">—</b></div>
+        <div><span>Resistance</span><b id="resistance">—</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-head"><h2>Risk Calculator</h2><span class="badge neutral">Educational</span></div>
+    <div class="form-grid">
+      <label>Account Balance<input id="balance" type="number" value="1000" min="0" step="0.01"></label>
+      <label>Risk %<input id="riskPct" type="number" value="1" min="0.01" max="100" step="0.01"></label>
+      <label>Entry<input id="riskEntry" type="number" step="0.01" placeholder="Auto"></label>
+      <label>Stop Loss<input id="riskSL" type="number" step="0.01" placeholder="Auto"></label>
+      <label>Contract Size<input id="contract" type="number" value="100" min="0.01" step="1"></label>
+      <button id="calcRisk" class="primary">Calculate Lot Size</button>
+    </div>
+    <div class="risk-result"><span>Suggested lot size</span><b id="lotSize">—</b><small id="riskMoney">Risk amount: —</small></div>
+  </section>
+
+  <section class="grid-2">
+    <div class="card">
+      <div class="section-head"><h2>Smart Alerts</h2></div>
+      <div class="form-grid">
+        <label>Price alert<input id="alertPrice" type="number" step="0.01" placeholder="e.g. 4000"></label>
+        <label>Direction<select id="alertDirection"><option value="above">Above / equal</option><option value="below">Below / equal</option></select></label>
+        <button id="addAlert" class="primary">Add Alert</button>
+      </div>
+      <div id="alerts" class="list"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-head"><h2>Economic News</h2><button id="demoNews">Load Demo</button></div>
+      <p class="small">Connect your preferred economic-calendar provider in <code>app.js</code> if you have an API plan. Demo items are clearly labeled.</p>
+      <div id="news" class="list"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-head"><h2>Signal History</h2><button id="clearHistory">Clear</button></div>
+    <div id="history" class="history"></div>
+  </section>
+
+  <section class="card settings">
+    <div class="section-head"><h2>API & App Settings</h2></div>
+    <div class="form-grid">
+      <label>Twelve Data API Key<input id="apiKey" type="password" placeholder="Paste your API key"></label>
+      <label>Symbol<input id="symbol" value="XAU/USD"></label>
+      <button id="saveSettings" class="primary">Save & Connect</button>
+      <button id="clearSettings">Clear Key</button>
+    </div>
+    <p class="small">For a public GitHub Pages site, do not hard-code a private API key into source files. The key entered here is stored only in this browser's local storage. API limits and provider terms still apply.</p>
+  </section>
+</main>
+
+<footer>© XAUUSD Pro V3.2 • Analysis tool only • Trading involves risk.</footer>
+<script src="app.js"></script><script>if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});</script>
+</body>
+</html>
